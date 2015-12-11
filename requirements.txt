@@ -1,0 +1,22 @@
+# Flask
+Flask==0.10.1
+
+# Flask extensios and libraries
+Flask-Login==0.3.2
+Flask-WTF==0.12
+Flask-SQLAlchemy==2.1
+MarkupSafe==0.23
+Werkzeug==0.11.2
+itsdangerous==0.24
+
+# ORM
+SQLAlchemy==1.0.9
+
+# Templating
+Jinja2==2.8
+
+# Forms
+WTForms==2.0.2
+
+# WSGI Server
+gunicorn==19.4.1
