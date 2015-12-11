@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import flask.ext.login as flask_login
 
 from .models import User

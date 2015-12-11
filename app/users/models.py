@@ -1,4 +1,4 @@
-# Models
+# -*- coding: utf-8 -*-
 
 class User(db.Model):
     """User model
@@ -10,7 +10,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     # XXX should be hashed.
     password = db.Column(db.String(80))
-    
+
     @property
     def is_active(self):
         return True
