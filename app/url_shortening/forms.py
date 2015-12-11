@@ -5,5 +5,10 @@ from wtforms.validators import DataRequired
 
 
 class CreateURLForm(Form):
-    input_url = StringField('Input URL', validators=[URL(), DataRequired()])
+    input_url = StringField(
+            'Input URL',
+            validators=[
+                    URL(require_tld=True, message=u'Invalid URL.'),
+                    DataRequired()])
+
     shorten_url = StringField('Shorten URL', validators=[URL()])

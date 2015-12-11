@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
+from app import db
+
+
 class User(db.Model):
-    """User model
+    """Users model
     Has some necessary boilerplate around flask-login and
     is storing password in an unsecure way.
     """
 
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
+    created = db.Column('c', db.DateTime, default=datetime.utcnow)
+    modified = db.Column('m', db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     # XXX should be hashed.
     password = db.Column(db.String(80))
 
