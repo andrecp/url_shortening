@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from app import app
 
-from url_shortening import views
+from url_shortener import views
 from users import views as user_views
 import errors as error_views
 
