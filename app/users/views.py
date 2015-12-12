@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template, flash
 from flask.ext.login import login_user, logout_user
 from app import app
 
@@ -14,20 +14,31 @@ def signup_login_view():
     if it fails and the username is not taken we create it.
     """
 
-    form = forms.SignUpForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
+    signup_form = forms.SignUpForm()
+    if signup_form.validate_on_submit():
+        username = signup_form.username.data
+        password = signup_form.password.data
         user = services.lookup_user(username)
+        success = False
         if not user:
             user = services.create_user(username=username, password=password)
+            if user:
+                success = True
+            else:
+                flash('Invalid username or password')
         else:
             password_matches = services.password_matches(user, password)
+            if password_matches:
+                success = True
+            else:
+                flash('Wrong password')
         # If we either created the user or logged him in...
-        if (user or password_matches):
+        if success:
             login_user(user)
+            flash('You were successfully logged in')
             return redirect(url_for('index_view'))
-    return render_template('home.html', signup_form=form)
+
+    return render_template('signup.html', signup_form=signup_form)
 
 
 @app.route('/logout', methods=['POST'])
