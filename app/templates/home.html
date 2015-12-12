@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% from "_form_helper.html" import render_field %}
 {% from "partials.html" import login_signup_partial %}
-{% from "partials.html" import url_partial %}
+{% from "partials.html" import shorten_url_partial %}
+{% from "partials.html" import discover_url_partial %}
     {% block content %}
         <h3> URL Shortener </h3>
         {% if current_user.is_authenticated %}
@@ -12,5 +13,6 @@
         {% else %}
             {{ login_signup_partial(signup_form) }}
         {% endif %}
-        {{ url_partial(url_form) }}
+        {{ shorten_url_partial(url_form) }}
+        {{ discover_url_partial(url_form) }}
     {% endblock %}

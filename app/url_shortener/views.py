@@ -19,8 +19,15 @@ def index_view():
                            url_form=url_form)
 
 
-@app.route('/shorten_url', methods=['POST'])
+@app.route('/shorten_url', methods=['GET', 'POST'])
 def shorten_url_view():
     """Shorten the respective URL."""
+
+    return 'hello'
+
+
+@app.route('/discover_url', methods=['GET', 'POST'])
+def discover_url_view():
+    """Return the real URL behind the shorten one."""
 
     return 'hello'
