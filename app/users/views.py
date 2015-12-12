@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import redirect, url_for, render_template, flash
-from flask.ext.login import login_user, logout_user
+from flask import request, abort, redirect, url_for, render_template, flash
+from flask.ext import login as flask_login
 from app import app
 
 from . import forms
@@ -34,7 +34,7 @@ def signup_login_view():
                 flash('Wrong password')
         # If we either created the user or logged him in...
         if success:
-            login_user(user)
+            flask_login.login_user(user)
             flash('You were successfully logged in')
             return redirect(url_for('index_view'))
 
@@ -45,12 +45,19 @@ def signup_login_view():
 def logout_view():
     """Logs the user out."""
 
-    logout_user()
+    flask_login.logout_user()
     return redirect(url_for('index_view'))
 
 
 @app.route('/users/<username>', methods=['GET'])
+@flask_login.login_required
 def user_view(username):
     """Lists the :username URLs."""
 
-    return render_template('user.html', url_list='url_list')
+    user = flask_login.current_user._get_current_object()
+    if not user.username == username:
+        abort(403)
+
+    urls = user.urls
+
+    return render_template('user.html', url_list=urls)

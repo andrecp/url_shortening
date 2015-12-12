@@ -19,4 +19,5 @@ db = SQLAlchemy(app)
 
 # Configure the app to use flask-login.
 login_manager = flask_login.LoginManager()
+login_manager.login_view = 'signup_login_view'
 login_manager.init_app(app)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+    {% block content %}
+        <h3>Your urls</h3>
+        <table>
+            <tr>
+                <td>Shorten URL</td>
+                <td>Original URL</td>
+                <td>Created</td>
+                <td>Clicks</td>
+            </tr>
+            {% for url in url_list %}
+            <tr>
+                <td>{{ url.shorten_url }}</td>
+                <td>{{ url.original_url }}</td>
+                <td>{{ url.created }}</td>
+                <td>{{ url.clicks }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    <p><a href="{{ url_for('index_view') }}">Back to home.</a><p>
+    {% endblock %}
