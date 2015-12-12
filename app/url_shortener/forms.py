@@ -14,3 +14,12 @@ class CreateURLForm(Form):
                     Length(max=23)])
 
     shorten_url = StringField('Shorten URL', validators=[URL()])
+
+
+class DiscoverURLForm(Form):
+    input_url = StringField(
+            'Input URL',
+            validators=[
+                    URL(require_tld=True, message=u'Invalid URL.'),
+                    DataRequired(),
+                    Length(max=23)])

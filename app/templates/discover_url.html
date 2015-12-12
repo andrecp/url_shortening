@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "partials.html" import discover_url_partial %}
+    {% block content %}
+    {{ discover_url_partial(url_form) }}
+    {% if real_url %}
+        <p>URL behind this short url is <a href="{{ real_url }}"</a>{{ real_url }}</p>
+    {% endif %}
+    <p><a href="{{ url_for('index_view') }}">Back to home.</a><p>
+    {% endblock %}
