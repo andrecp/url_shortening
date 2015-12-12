@@ -4,6 +4,8 @@ from datetime import datetime
 
 from app import db
 
+from url_shortener.models import URL
+
 
 class User(db.Model):
     """Users model
