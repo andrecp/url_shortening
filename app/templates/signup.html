@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% from "partials.html" import login_signup_partial %}
+    {% block content %}
+        <h3>Sign up / Login</h3>
+        {{ login_signup_partial(signup_form) }}
+    {% endblock %}

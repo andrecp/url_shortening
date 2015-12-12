@@ -1,26 +1,20 @@
 {% extends "base.html" %}
 {% from "_form_helper.html" import render_field %}
+{% from "partials.html" import login_signup_partial %}
     {% block content %}
-    <h3> URL Shortener </h3>
-
-
-    {% if current_user.is_authenticated %}
-        <p>Hello {{ current_user.username }} check your past urls at <a href="{{ url_for('user_view', username=current_user.username) }}">your profile</a></p>
-        <form method="POST" action="{{ url_for('logout_view') }}">
-            <input type="submit" value="Logout">
+        <h3> URL Shortener </h3>
+        {% if current_user.is_authenticated %}
+            <p>Hello {{ current_user.username }} check your past urls at <a href="{{ url_for('user_view', username=current_user.username) }}">your profile</a></p>
+            <form method="POST" action="{{ url_for('logout_view') }}">
+                <input type="submit" value="Logout">
+            </form>
+        {% else %}
+            {{ login_signup_partial(signup_form) }}
+        {% endif %}
+        <form method="POST" action="{{ url_for('shorten_url_view') }}">
+            {{ url_form.csrf_token }}
+            {{ render_field(url_form.input_url) }}
+            {{ render_field(url_form.shorten_url) }}
+            <input type="submit" value="Shorten">
         </form>
-    {% else %}
-        <form method="POST" action="{{ url_for('signup_login_view') }}">
-            {{ signup_form.csrf_token }}
-            {{ render_field(signup_form.username) }}
-            {{ render_field(signup_form.password) }}
-            <input type="submit" value="Log in">
-        </form>
-    {% endif %}
-    <form method="POST" action="{{ url_for('shorten_url_view') }}">
-        {{ url_form.csrf_token }}
-        {{ render_field(url_form.input_url) }}
-        {{ render_field(url_form.shorten_url) }}
-        <input type="submit" value="Shorten">
-    </form>
     {% endblock %}

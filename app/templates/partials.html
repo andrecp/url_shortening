@@ -1,0 +1,10 @@
+{% from "_form_helper.html" import render_field %}
+
+{% macro login_signup_partial(signup_form) %}
+    <form method="POST" action="{{ url_for('signup_login_view') }}">
+        {{ signup_form.csrf_token }}
+        {{ render_field(signup_form.username) }}
+        {{ render_field(signup_form.password) }}
+        <input type="submit" value="Log in">
+    </form>
+{% endmacro %}
