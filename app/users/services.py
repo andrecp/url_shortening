@@ -28,3 +28,15 @@ def create_user(username, password):
         return None
 
     return user
+
+
+def lookup_user(username):
+    try:
+        user = User.query.filter_by(username=username).one()
+    except NoResultFound:
+        return None
+    return user
+
+
+def password_matches(user, password):
+    return user.password == password
