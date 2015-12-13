@@ -12,6 +12,9 @@ itsdangerous==0.24
 # ORM
 SQLAlchemy==1.0.9
 
+# Database drive
+psycopg2==2.6.1
+
 # Templating
 Jinja2==2.8
 
