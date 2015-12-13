@@ -36,23 +36,21 @@ def shorten_url_view():
                 flash('Short URL already registered')
                 return render_template('create_url.html',
                                        url_form=url_form)
-        else:
-            short_url = services.shorten_url(real_url)
         # Check if we have an user.
         user = flask_login.current_user._get_current_object()
         if not user.is_authenticated:
             user = None
+
         # Create the URL, if the user exists redirect to its
         # profile, else go to a success page.
-        url = services.create_url(real_url, short_url, user)
+        url = services.create_url(real_url, user=user, short_url=short_url)
         if url:
             if user:
                 return redirect(url_for('user_view', username=user.username))
             else:
-                return render_template('success.html', url=real_url)
+                return render_template('success.html', url=url.shorten_url)
 
-    return render_template('create_url.html',
-                           url_form=url_form)
+    return render_template('create_url.html', url_form=url_form)
 
 
 @app.route('/discover_url', methods=['GET', 'POST'])
@@ -68,8 +66,7 @@ def discover_url_view():
             flash('Short URL not registered')
         else:
             real_url = real_url.original_url
-    return render_template('discover_url.html',
-                           url_form=url_form,
+    return render_template('discover_url.html', url_form=url_form,
                            real_url=real_url)
 
 
@@ -77,7 +74,6 @@ def discover_url_view():
 def redirect_to_url(short_url):
     """Shorten the respective URL."""
 
-    print short_url
     real_url = services.lookup_url_by_shorten(short_url, increment=True)
     if not real_url:
         abort(404)
