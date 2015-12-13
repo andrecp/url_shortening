@@ -42,6 +42,7 @@ def signup_login_view():
 
 
 @app.route('/logout', methods=['POST'])
+@flask_login.login_required
 def logout_view():
     """Logs the user out."""
 
