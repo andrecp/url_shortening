@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% from "partials.html" import shorten_url_partial %}
+    {% block content %}
+    {{ shorten_url_partial(url_form) }}
+    <p><a href="{{ url_for('index_view') }}">Back to home.</a><p>
+    {% endblock %}
