@@ -111,7 +111,7 @@ class TestURLShortenerView(TestBoilerPlate):
         response = self.app.get('/r/1')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.headers['location'], 'http://www.google.com')
-        # Get again from the DB...
+        # Get again from the DB, should've one click.
         url = url_model.URL.query.filter_by(id=url.id).one()
         self.assertEqual(1, url.clicks)
 
