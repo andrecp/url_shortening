@@ -4,13 +4,13 @@
 import unittest
 
 from url_shortener import services
-from users import models as user_model
 from url_shortener import models as url_model
+from test_user import makeOne as makeUser
 
 from sqlalchemy.exc import IntegrityError
-from .test_user import makeOne as makeUser
-from app import app
 from app import db
+
+from . import TestBoilerPlate
 
 
 def makeOne(**kwargs):
@@ -28,21 +28,21 @@ def makeOne(**kwargs):
     return url
 
 
-class TestURLShortenerModel(unittest.TestCase):
+class TestURLShortenerModel(TestBoilerPlate):
     """Test URL shortener models."""
-    pass
+
+    def test_create_url(self):
+        """Creating an URL should work..."""
+
+        url = makeOne()
+        self.assertTrue(url.id >= 1)
+
+        # Two URLs with same shortcode should error.
+        self.assertRaises(IntegrityError, makeOne)
 
 
-class TestURLShortenerService(unittest.TestCase):
+class TestURLShortenerService(TestBoilerPlate):
     """Test services provided by the URL shortener module."""
-
-    def setUp(self):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test3.db'
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
 
     def test_shorten_url(self):
         """shorten_url service should encode urls properly.. """
