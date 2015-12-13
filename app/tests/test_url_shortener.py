@@ -127,3 +127,36 @@ class TestURLShortenerView(TestBoilerPlate):
         response = self.app.post('/discover_url', data={'input_url': 1})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('http://www.google.com' in response.data)
+
+    def test_shorten_url(self):
+        """Should be able to shorten an url..."""
+
+        # First let's just shorten a regular URL. Should be 1.
+        url = 'http://www.google.com'
+        response = self.app.post('/shorten_url', data={'input_url': url})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('success', response.data)
+        created_url = url_model.URL.query.filter_by(original_url=url).one()
+        self.assertEqual(created_url.short_url, '1')
+
+        # Now let's shorten another URL and give the desired short url.
+        url = 'http://www.facebook.com'
+        response = self.app.post('/shorten_url', data={'input_url': url, 'short_url': 'hello'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('success', response.data)
+        created_url = url_model.URL.query.filter_by(original_url=url).one()
+        self.assertEqual(created_url.short_url, 'hello')
+
+        # If we do the same again with an already picked short URL it has to fail.
+        response = self.app.post('/shorten_url', data={'input_url': url, 'short_url': 'hello'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Short URL already registered', response.data)
+
+        # If we are logged in it should appear in our profile.
+        with self.app:
+            _ = self.app.post('/signup_login',
+                              data={'username': 'andre',
+                                    'password': 'test'})
+            response = self.app.post('/shorten_url', data={'input_url': url}, follow_redirects=True)
+            self.assertIn(url, response.data)
+            self.assertEqual(response.status_code, 200)
