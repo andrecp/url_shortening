@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the url shortener module."""
 
-import unittest
-
 from url_shortener import services
 from url_shortener import models as url_model
 from test_user import makeOne as makeUser
@@ -91,7 +89,41 @@ class TestURLShortenerService(TestBoilerPlate):
         self.assertIn(url, user.urls)
 
 
-class TestURLShortenerView(unittest.TestCase):
+class TestURLShortenerView(TestBoilerPlate):
     """Test URL shortener views."""
 
-    pass
+    def test_get_index(self):
+        """Getting index should return 200..."""
+
+        response = self.app.get('/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_redirect_to_url(self):
+        """Should be able to redirect to an url from a short url..."""
+
+        # Not yet created should 404.
+        response = self.app.get('/r/1')
+        self.assertEqual(response.status_code, 404)
+
+        # Should redirect to the original URL and increment clicks.
+        url = makeOne(**{'short_url': '1', 'original_url': 'http://www.google.com'})
+        self.assertEqual(0, url.clicks)
+        response = self.app.get('/r/1')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.headers['location'], 'http://www.google.com')
+        # Get again from the DB...
+        url = url_model.URL.query.filter_by(id=url.id).one()
+        self.assertEqual(1, url.clicks)
+
+    def test_get_discover_url(self):
+        """Should be able to discover an url from a short url..."""
+
+        # Not yet created...
+        response = self.app.post('/discover_url', data={'input_url': 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Short URL not registered' in response.data)
+        # Creating...
+        _ = makeOne(**{'short_url': '1', 'original_url': 'http://www.google.com'})
+        response = self.app.post('/discover_url', data={'input_url': 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('http://www.google.com' in response.data)

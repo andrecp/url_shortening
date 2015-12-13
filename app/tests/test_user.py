@@ -7,6 +7,8 @@ from users import models
 from users import services
 from app import db
 
+from flask.ext import login as flask_login
+
 from sqlalchemy.exc import IntegrityError
 
 from . import TestBoilerPlate
@@ -89,8 +91,65 @@ class TestUserService(TestBoilerPlate):
         self.assertFalse(password_matches(user, reversed(password)))
 
 
-class TestUserView(unittest.TestCase):
+class TestUserView(TestBoilerPlate):
     """Test user views."""
 
-    def test_upper(self):
-        self.assertTrue(True)
+    def test_signup_login_view(self):
+        """An user should be able to login or create an user..."""
+
+        # Just make sure it's there.
+        response = self.app.get('/signup_login')
+        self.assertEqual(response.status_code, 200)
+
+        # Creating a new user.
+        with self.app:
+            total_users = len(models.User.query.all())
+            response = self.app.post('/signup_login',
+                                     data={'username': 'andre',
+                                           'password': 'test'})
+            self.assertEqual(response.status_code, 302)
+            create_user = models.User.query.filter_by(username='andre').one()
+            self.assertEqual(create_user.password, 'test')
+            self.assertEqual(flask_login.current_user.username, 'andre')
+            self.assertEqual(total_users + 1, len(models.User.query.all()))
+
+        # Logging in doesn't create a new user.
+        total_users = len(models.User.query.all())
+        response = self.app.post('/signup_login', data={'username': 'andre', 'password': 'test'})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(total_users, len(models.User.query.all()))
+
+        # Wrong password.
+        response = self.app.post('/signup_login', data={'username': 'andre', 'password': 'test1'})
+        self.assertTrue('Wrong password' in response.data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_logout_view(self):
+        """An user should be able to log out..."""
+
+        # Have to be logged in to log out.
+        response = self.app.post('/logout')
+        self.assertEqual(response.headers['location'],
+                         'http://localhost/signup_login?next=%2Flogout')
+        self.assertEqual(response.status_code, 302)
+
+        with self.app:
+            _ = self.app.post('/signup_login',
+                              data={'username': 'andre',
+                                    'password': 'test'})
+            self.assertEqual(flask_login.current_user.is_authenticated, True)
+            _ = self.app.post('/logout')
+            self.assertEqual(flask_login.current_user.is_authenticated, False)
+
+    def test_user_listing_view(self):
+        """An user should be able to see his urls..."""
+
+        with self.app:
+            _ = self.app.post('/signup_login',
+                              data={'username': 'andre',
+                                    'password': 'test'})
+            response = self.app.get('/users/andre')
+            self.assertEqual(response.status_code, 200)
+            # Shouldn't be able to see other person's.
+            response = self.app.get('/users/otherperson')
+            self.assertEqual(response.status_code, 403)
