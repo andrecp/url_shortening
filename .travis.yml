@@ -7,4 +7,4 @@ install:
   - "pip install -r requirements.txt"
 
 script:
-  - "nosetests nosetests url-shorten/app"
+  - "nosetests url-shorten/app"
