@@ -13,9 +13,16 @@ template_folder = os.path.join(
 
 # Instantiate the flask app.
 app = flask.Flask(__name__, template_folder=template_folder)
-app.secret_key = 'xx'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/production.db'
+
+# Configure differently if in production.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+if os.environ.get('MODE') == 'production':
+    app.secret_key = os.environ.get('SECRET_KEY')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+else:
+    app.secret_key = 'xx'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/production.db'
+
 db = SQLAlchemy(app)
 
 # Configure the app to use flask-login.
