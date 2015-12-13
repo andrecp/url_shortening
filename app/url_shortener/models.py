@@ -18,5 +18,5 @@ class URL(db.Model):
     original_url = db.Column(db.String(80))
     shorten_url = db.Column(db.String(80), unique=True)
 
-    clicks = db.Column(db.Integer())
+    clicks = db.Column(db.Integer(), default=0)
     created = db.Column('c', db.DateTime, default=datetime.utcnow)
