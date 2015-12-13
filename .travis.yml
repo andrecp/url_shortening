@@ -1,10 +1,12 @@
 language: python
 python:
-  - "2.7"
-
+- '2.7'
 install:
-  - "pip install -U pip"
-  - "pip install -r requirements.txt"
-
+- pip install -U pip
+- pip install -r requirements.txt
 script:
-  - "nosetests app"
+- nosetests app
+deploy:
+  app: surl1
+  api_key:
+    secure: tvtfw+h7G1k58PzhB4+J8vm+oygSiSmoGvrq7dmkFjQe427Myq5Ag9BNyq3FultSMNYJ2Z1oFrx8AeoaaOB5XSEUUHTwzOKZ0jzjfE3mU2CXN+qe4jjhjrwXNIz7qI5ragRUMS7Pxlmh3DNyEnUM79misves5e1qrLuQQg6xuZEMjVu93d3EWN7VQOyhOLtbCpbG/pD/xqSjL9yVIlcGOJIXyaaKWUW/3uMA5YsOK4ztPiuoV6dWmbNPuc8h7mqpBvwvC8EkCP4QCX7QNuvR1saGOg6YPgzMzk5US12P1JfHDOL5CHqluyH1HlekiyCOe7J2x05VaUxi4oxBO6ie36bzrsR6/vrjWd54rQ6jPOzVGHlo460KJ034rgFTcWb4djFwuyrPPaPgUsmXEurwaFqNK1gxJcBzopeKphARMYQRhh9P/MsTM1D9B4MC34ZGWpuZccfZ8z2chaRjgVkeb3sdAv+8n8yXy8yZ/Ifs0dcBBub/G1tsYYiTQwyzMkE9C8cIb7gKRT3Dg10p6YEDoQoPmRqZLcOCHx/mtGxH9jSHPLkTXoelgbj94Xx/EFQvuZ1j9s+7HfTkef2NFuVX6m5xv0cHk84r3AA5IQqZPlre89PsqRN5DOFjhxTfPijK64ipViEi2bkF3eoxmkX3GxjRqB1X3JZsowDXyabTW9E=
