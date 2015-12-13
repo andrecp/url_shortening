@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "partials.html" import shorten_url_partial %}
     {% block content %}
-    <p>Your URL was created with success: <a href="{{ url }}">{{ url }}</a></p>
+    <p>Your URL was created with success: <a href="{{ request.url_root + 'r/' + url }}">{{ request.url_root + 'r/' + url }}</a></p>
     <p>Next time, create an URL whilst logged in and you can have a list of all your created URLs in your profile!</p>
     <p><a href="{{ url_for('index_view') }}">Back to home.</a><p>
     {% endblock %}

@@ -10,7 +10,7 @@
             </tr>
             {% for url in url_list %}
             <tr>
-                <td>{{ url.short_url }}</td>
+                <td>{{ request.url_root + 'r/' + url.short_url }}</td>
                 <td>{{ url.original_url }}</td>
                 <td>{{ url.created }}</td>
                 <td>{{ url.clicks }}</td>
