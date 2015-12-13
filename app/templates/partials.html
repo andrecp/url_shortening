@@ -13,7 +13,7 @@
     <form method="POST" action="{{ url_for('shorten_url_view') }}">
         {{ url_form.csrf_token }}
         {{ render_field(url_form.input_url) }}
-        {{ render_field(url_form.shorten_url) }}
+        {{ render_field(url_form.short_url) }}
         <input type="submit" value="Shorten">
     </form>
 {% endmacro %}

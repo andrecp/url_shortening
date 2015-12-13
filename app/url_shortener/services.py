@@ -11,7 +11,7 @@ def lookup_url_by_shorten(url, increment=False):
     """
 
     try:
-        url = URL.query.filter_by(shorten_url=url).one()
+        url = URL.query.filter_by(short_url=url).one()
     except NoResultFound:
         return None
     if increment:
@@ -59,9 +59,9 @@ def create_url(original_url, user=None, short_url=None):
 
     # If no short_url generate one.
     if short_url:
-        url.shorten_url = short_url
+        url.short_url = short_url
     else:
-        url.shorten_url = shorten_url(url.id)
+        url.short_url = shorten_url(url.id)
 
     # And now save to the database.
     db.session.add(url)

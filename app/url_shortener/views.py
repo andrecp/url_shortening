@@ -28,7 +28,7 @@ def shorten_url_view():
     url_form = url_forms.CreateURLForm()
     if url_form.validate_on_submit():
         real_url = url_form.input_url.data
-        short_url = url_form.shorten_url.data
+        short_url = url_form.short_url.data
         # If a shorten URL is given we look if it exists.
         if short_url:
             has_url = services.lookup_url_by_shorten(short_url)
@@ -48,7 +48,7 @@ def shorten_url_view():
             if user:
                 return redirect(url_for('user_view', username=user.username))
             else:
-                return render_template('success.html', url=url.shorten_url)
+                return render_template('success.html', url=url.short_url)
 
     return render_template('create_url.html', url_form=url_form)
 

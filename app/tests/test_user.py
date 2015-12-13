@@ -9,7 +9,7 @@ from app import db
 
 
 def makeOne(**kwargs):
-    """Creates an user and return its id"""
+    """Creates an user and return it"""
 
     default = {
         'username': 'abc',
@@ -18,6 +18,8 @@ def makeOne(**kwargs):
 
     default.update(kwargs)
     user = models.User(**default)
+    db.session.add(user)
+    db.session.commit()
     return user
 
 
@@ -25,17 +27,16 @@ class TestUserModel(unittest.TestCase):
     """Test user models."""
 
     def setUp(self):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test3.db'
         db.create_all()
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
 
     def test_create_user(self):
         user = makeOne()
-        db.session.add(user)
-        db.session.commit()
-        self.assertEqual(user.id, 1)
+        self.assertTrue(user.id >= 1)
 
 
 class TestUserService(unittest.TestCase):

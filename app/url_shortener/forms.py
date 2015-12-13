@@ -14,7 +14,7 @@ class CreateURLForm(Form):
                     DataRequired(),
                     Length(max=23)])
 
-    shorten_url = StringField('Shorten URL', validators=[Optional()])
+    short_url = StringField('Short URL', validators=[Optional()])
 
 
 class DiscoverURLForm(Form):

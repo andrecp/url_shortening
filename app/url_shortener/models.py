@@ -16,7 +16,7 @@ class URL(db.Model):
     user = db.relationship('User', backref='urls')
 
     original_url = db.Column(db.String(80))
-    shorten_url = db.Column(db.String(80), unique=True)
+    short_url = db.Column(db.String(80), unique=True)
 
     clicks = db.Column(db.Integer(), default=0)
     created = db.Column('c', db.DateTime, default=datetime.utcnow)
