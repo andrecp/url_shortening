@@ -38,6 +38,9 @@ def shorten_url(url_id):
         url_id = url_id / base
         result.append(dictionary[remainder])
 
+    if len(result) > 23:
+        raise RuntimeError('Out of URLs!')
+
     return ''.join(result)
 
 

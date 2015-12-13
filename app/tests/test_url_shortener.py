@@ -52,6 +52,9 @@ class TestURLShortenerService(TestBoilerPlate):
         self.assertEquals('a', shortner(10))
         self.assertEquals('Yb8', shortner(31494))
         self.assertEquals('zOYKUa', shortner(9999999999))
+        # If we have too many URLs and its len is bigger than 23 we have an error.
+        self.assertRaises(RuntimeError, shortner,
+                          999999999999999999999999999999999999999999)
 
     def test_lookup_url(self):
         """given a short url returns the URL object.. """
@@ -151,6 +154,12 @@ class TestURLShortenerView(TestBoilerPlate):
         response = self.app.post('/shorten_url', data={'input_url': url, 'short_url': 'hello'})
         self.assertEqual(response.status_code, 200)
         self.assertIn('Short URL already registered', response.data)
+
+        # If we try to pick a short URL bigger than 23 it errors.
+        big_url = 'a' * 25
+        response = self.app.post('/shorten_url', data={'input_url': url, 'short_url': big_url})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Field cannot be longer than 23', response.data)
 
         # If we are logged in it should appear in our profile.
         with self.app:
